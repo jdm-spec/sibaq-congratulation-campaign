@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIBAQ '26 Poster Generator</title>
+
+  <!-- Tailwind & Cropper & html2canvas -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <!-- Fallback Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700&family=Lora:ital,wght@0,500;0,600;0,700;1,400&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    @font-face {
+      font-family: 'Azurio Test';
+      src: url('./fonts/AzurioTest-Bold.otf') format('opentype'),
+           url('./fonts/AzurioTest-Bold.ttf') format('truetype'),
+           url('./fonts/AzurioTest-Bold.woff2') format('woff2');
+      font-weight: 700 800;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Azurio Test';
+      src: url('./fonts/AzurioTest-Regular.otf') format('opentype'),
+           url('./fonts/AzurioTest-Regular.ttf') format('truetype'),
+           url('./fonts/AzurioTest-Regular.woff2') format('woff2');
+      font-weight: 400 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    body {
+      font-family: "Azurio Test", "Montserrat", sans-serif;
+    }
+
+    #posterphoto {
+      position: relative;
+      width: 100%;
+      max-width: 560px;
+      aspect-ratio: 4 / 5;
+      background-color: #d92d2c;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    #posterBg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    #userPhotoWrapper {
+      position: absolute;
+      top: 20.3%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 29.8%;
+      aspect-ratio: 3 / 4;
+      z-index: 2;
+    }
+
+    #nameBadgeWrap {
+      position: absolute;
+      top: 54.1%;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 4.1%;
+      min-width: 23.6%;
+      max-width: 86%;
+      z-index: 3;
+      transition: width 0.2s ease;
+    }
+
+    #nameSvg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    #congratsMessage {
+      position: absolute;
+      top: 59.6%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 72%;
+      font-family: 'Azurio Test', 'Lora', 'Anek Malayalam', serif;
+      color: #fff6f2;
+      text-align: center;
+      font-size: clamp(9.2px, 1.42vw, 13.4px);
+      line-height: 1.38;
+      margin: 0;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);
+      z-index: 3;
+    }
+
+    #prizeHighlight {
+      font-weight: 700;
+      color: #ffffff;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex justify-center items-center p-3 md:p-6">
+  <div class="bg-white rounded-3xl shadow-xl p-4 md:p-6 w-full max-w-6xl flex flex-col lg:flex-row gap-6 items-center">
+
+    <!-- Poster Preview -->
+    <div id="posterArea" class="w-full lg:w-[58%] flex justify-center items-center">
+      <div id="posterphoto" class="rounded-xl shadow-md">
+        <img id="posterBg" src="MODEL copy.jpg" alt="Poster Template" />
+
+        <!-- 1. Scalloped Arch Portrait -->
+        <div id="userPhotoWrapper">
+          <svg id="archSvg" viewBox="0 0 300 400" class="w-full h-full block" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <clipPath id="scalloped-arch-clip">
+                <path id="arch-path" d="" />
+              </clipPath>
+            </defs>
+            <g clip-path="url(#scalloped-arch-clip)">
+              <rect width="300" height="400" fill="#ececec" />
+              <ellipse cx="150" cy="360" rx="230" ry="180" fill="#15803d" />
+              <ellipse cx="150" cy="390" rx="220" ry="175" fill="#facc15" />
+              <image id="userPhotoSvg" href="" x="0" y="0" width="300" height="400" preserveAspectRatio="xMidYMid slice" />
+            </g>
+          </svg>
+        </div>
+
+        <!-- 2. Custom SVG Shape + Native SVG Text in Azurio Test -->
+        <div id="nameBadgeWrap">
+          <svg id="nameSvg" viewBox="0 0 586 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" fill="rgb(26, 138, 70)" d="M2.784,15.995 C2.784,15.995 7.239,30.239 2.784,33.198 C-1.670,36.157 0.413,89.507 6.128,89.437 C12.670,89.367 50.686,87.340 55.163,93.407 C59.641,99.475 112.322,87.481 119.742,86.304 C127.163,85.128 188.711,77.915 204.402,83.56 C220.92,88.197 284.421,88.311 289.60,88.254 C293.700,88.197 332.983,83.389 339.564,86.304 C346.145,89.220 417.139,83.389 426.266,86.304 C435.394,89.220 491.760,93.231 498.80,90.203 C504.400,87.174 561.115,82.836 567.422,85.5 C573.729,87.174 584.521,91.309 584.646,82.81 C584.770,72.854 583.690,22.625 583.770,18.445 C583.850,14.266 582.666,1.763 572.677,1.877 C562.689,1.991 453.958,2.786 438.235,1.877 C422.512,0.968 375.552,8.827 355.328,2.852 C335.104,-3.122 290.67,5.192 281.762,5.126 C273.457,5.60 234.40,11.329 220.165,5.126 C206.291,-1.77 140.845,4.72 119.742,6.100 C98.640,8.128 22.678,4.266 14.493,4.151 C6.309,4.37 9.225,6.789 2.784,15.995 Z" />
+          </svg>
+          <svg id="nameTextSvg" viewBox="0 0 200 36" preserveAspectRatio="xMidYMid meet"
+               style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible;">
+            <text id="userNameSvgText" x="100" y="24.5" text-anchor="middle" fill="#ffffff"
+                  font-family="'Azurio Test', Montserrat, 'Anek Malayalam', sans-serif" font-weight="800" font-size="21" letter-spacing="1.2">
+              MAHMOOD
+            </text>
+          </svg>
+        </div>
+
+        <!-- 3. Dynamic Achievement Paragraph -->
+        <p id="congratsMessage">
+          A proud moment of creativity and literary excellence! Warm congratulations on securing
+          <span id="prizeHighlight">First Prize in Malayalam Poetry</span>
+          at <strong class="font-bold text-white">SIBAQ 26</strong>. Your words, imagination, and poetic expression have truly made this achievement special. May this success be the beginning of many more milestones in your literary journey.
+        </p>
+      </div>
+    </div>
+
+    <!-- Controls Panel -->
+    <div class="flex flex-col justify-center items-center gap-4 w-full lg:w-[42%]">
+      <div class="w-full max-w-sm flex flex-col gap-3">
+        <label class="text-xs font-bold uppercase tracking-wider text-gray-500 text-center">
+          Participant Name 
+        </label>
+        <input id="nameInput" type="text" value="" placeholder="Enter Name"
+          class="border border-gray-300 rounded-full px-4 py-2.5 w-full text-center font-semibold focus:outline-none focus:ring-2 focus:ring-green-600">
+
+        <label class="text-xs font-bold uppercase tracking-wider text-gray-500 text-center mt-1">
+          Prize & Grade Selection
+        </label>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <select id="prizePositionSelect" aria-label="Prize Position"
+            class="border border-red-600 rounded-full px-3 py-2 text-xs font-semibold text-gray-700 bg-white text-center focus:outline-none focus:ring-2 focus:ring-red-600 cursor-pointer">
+            <option value="">Prize...</option>
+            <option value="First Prize" selected>First Prize</option>
+            <option value="Second Prize">Second Prize</option>
+            <option value="Third Prize">Third Prize</option>
+          </select>
+
+          <select id="withGradeSelect" aria-label="With Grade"
+            class="border border-gray-300 rounded-full px-3 py-2 text-xs font-semibold text-gray-700 bg-white text-center focus:outline-none focus:ring-2 focus:ring-red-600 cursor-pointer">
+            <option value="" selected>With Grade...</option>
+            <option value="with A Grade">with A Grade</option>
+            <option value="with B Grade">with B Grade</option>
+            <option value="with C Grade">with C Grade</option>
+          </select>
+
+          <select id="onlyGradeSelect" aria-label="Only Grade"
+            class="border border-gray-300 rounded-full px-3 py-2 text-xs font-semibold text-gray-700 bg-white text-center focus:outline-none focus:ring-2 focus:ring-red-600 cursor-pointer">
+            <option value="" selected>Only Grade...</option>
+            <option value="A Grade">only A Grade</option>
+            <option value="B Grade">only B Grade</option>
+            <option value="C Grade">only C Grade</option>
+          </select>
+        </div>
+
+        <!-- Box shows ONLY the program name -->
+        <label class="text-xs font-bold uppercase tracking-wider text-gray-500 text-center mt-1">
+          Program Name
+        </label>
+        <input id="prizeInput" type="text" value="" placeholder="Enter Program Name"
+          class="border border-gray-300 rounded-full px-4 py-2.5 w-full text-center text-sm focus:outline-none focus:ring-2 focus:ring-red-600">
+
+        <p id="bgStatusText" class="text-xs text-center text-gray-500 min-h-[16px]"></p>
+
+        <button id="uploadBtn" type="button"
+          class="bg-pink-600 text-white font-semibold px-6 py-2.5 rounded-full hover:bg-pink-700 transition text-sm shadow">
+          Create with your photo
+        </button>
+
+        <button id="downloadBtn" type="button"
+          class="bg-green-600 text-white font-semibold px-6 py-2.5 rounded-full hover:bg-green-700 transition text-sm shadow">
+          Download HD Poster
+        </button>
+      </div>
+
+      <p class="text-xs text-gray-500 mt-2">
+        Developed By <a href="https://www.instagram.com/_irsh__aad._/" class="underline hover:text-gray-800">@_irsh__aad._</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Hidden File Input -->
+  <input type="file" id="fileInput" accept="image/*" class="hidden">
+
+  <!-- Crop Modal -->
+  <div id="cropModal" class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center hidden z-50">
+    <div class="bg-white rounded-xl shadow-2xl w-[95%] sm:w-[90%] md:w-[70%] max-w-2xl p-4 relative flex flex-col items-center overflow-hidden">
+      <button id="closeModal" class="absolute top-2 right-3 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+      <h3 class="text-lg md:text-xl font-semibold mb-3 text-center">Crop Your Image</h3>
+      <div class="overflow-hidden flex justify-center items-center w-full">
+        <img id="cropImage" class="max-h-[60vh] object-contain" alt="Crop Target">
+      </div>
+      <div class="mt-4 flex justify-center w-full">
+        <button id="applyCrop" class="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700 transition w-full sm:w-auto">
+          Apply Crop & Remove BG
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DEFAULT_REMOVE_BG_API_KEY = "hPyt4ugdFj76uhm7TpVdW4mh";
+
+    // 1. Generate Exact Scalloped Arch Path (300 x 400 coordinate space)
+    (function generateScallopedArch() {
+      const W = 300;
+      const H = 400;
+      const R = 150;
+
+      const sideCount = 10;
+      const arcCount = 19;
+      const bottomCount = 12;
+      const points = [];
+
+      function addLineNotches(x1, y1, x2, y2, count) {
+        const dx = (x2 - x1) / count;
+        const dy = (y2 - y1) / count;
+        const segLen = Math.hypot(dx, dy);
+        const r = segLen * 0.32;
+        const ux = dx / segLen;
+        const uy = dy / segLen;
+
+        for (let i = 0; i < count; i++) {
+          const sx = x1 + dx * i;
+          const sy = y1 + dy * i;
+          const midX = sx + dx * 0.5;
+          const midY = sy + dy * 0.5;
+
+          const p1x = midX - ux * r;
+          const p1y = midY - uy * r;
+          const p2x = midX + ux * r;
+          const p2y = midY + uy * r;
+
+          points.push(`L ${p1x.toFixed(2)} ${p1y.toFixed(2)}`);
+          points.push(`A ${r.toFixed(2)} ${r.toFixed(2)} 0 0 0 ${p2x.toFixed(2)} ${p2y.toFixed(2)}`);
+        }
+        points.push(`L ${x2} ${y2}`);
+      }
+
+      points.push(`M 0 ${H}`);
+      addLineNotches(0, H, 0, R, sideCount);
+
+      const dTheta = Math.PI / arcCount;
+      const arcSegLen = R * dTheta;
+      const arcNotchR = arcSegLen * 0.32;
+
+      for (let i = 0; i < arcCount; i++) {
+        const thetaMid = Math.PI - (i + 0.5) * dTheta;
+        const halfAngle = arcNotchR / R;
+        const t1 = thetaMid + halfAngle;
+        const t2 = thetaMid - halfAngle;
+
+        const p1x = R + R * Math.cos(t1);
+        const p1y = R - R * Math.sin(t1);
+        const p2x = R + R * Math.cos(t2);
+        const p2y = R - R * Math.sin(t2);
+
+        points.push(`L ${p1x.toFixed(2)} ${p1y.toFixed(2)}`);
+        points.push(`A ${arcNotchR.toFixed(2)} ${arcNotchR.toFixed(2)} 0 0 0 ${p2x.toFixed(2)} ${p2y.toFixed(2)}`);
+      }
+      points.push(`L ${W} ${R}`);
+
+      addLineNotches(W, R, W, H, sideCount);
+      addLineNotches(W, H, 0, H, bottomCount);
+
+      points.push('Z');
+      document.getElementById('arch-path').setAttribute('d', points.join(' '));
+    })();
+
+    // 2. Elements & Live Updates
+    const uploadBtn = document.getElementById("uploadBtn");
+    const fileInput = document.getElementById("fileInput");
+    const cropModal = document.getElementById("cropModal");
+    const cropImage = document.getElementById("cropImage");
+    const closeModal = document.getElementById("closeModal");
+    const applyCrop = document.getElementById("applyCrop");
+    const userPhotoSvg = document.getElementById("userPhotoSvg");
+    const bgStatusText = document.getElementById("bgStatusText");
+
+    const nameInput = document.getElementById("nameInput");
+    const nameBadgeWrap = document.getElementById("nameBadgeWrap");
+    const userNameSvgText = document.getElementById("userNameSvgText");
+
+    const prizePositionSelect = document.getElementById("prizePositionSelect");
+    const withGradeSelect = document.getElementById("withGradeSelect");
+    const onlyGradeSelect = document.getElementById("onlyGradeSelect");
+
+    const prizeInput = document.getElementById("prizeInput");
+    const prizeHighlight = document.getElementById("prizeHighlight");
+
+    const downloadBtn = document.getElementById("downloadBtn");
+    const posterArea = document.getElementById("posterphoto");
+    let cropper;
+    let activeMode = "prize";
+
+    function updatePosterPrizeText() {
+      const programName = prizeInput.value.trim() || "Malayalam Poetry";
+      if (activeMode === "onlyGrade") {
+        const grade = onlyGradeSelect.value || "A Grade";
+        prizeHighlight.textContent = `${grade} in ${programName}`;
+        return;
+      }
+      const prize = prizePositionSelect.value || "First Prize";
+      const grade = activeMode === "withGrade" && withGradeSelect.value ? ` ${withGradeSelect.value}` : "";
+      prizeHighlight.textContent = `${prize}${grade} in ${programName}`;
+    }
+
+    prizePositionSelect.addEventListener("change", () => {
+      if (prizePositionSelect.value) {
+        onlyGradeSelect.value = "";
+        activeMode = withGradeSelect.value ? "withGrade" : "prize";
+      }
+      updatePosterPrizeText();
+    });
+
+    withGradeSelect.addEventListener("change", () => {
+      if (withGradeSelect.value) {
+        onlyGradeSelect.value = "";
+        activeMode = "withGrade";
+      } else {
+        activeMode = prizePositionSelect.value ? "prize" : "onlyGrade";
+      }
+      updatePosterPrizeText();
+    });
+
+    onlyGradeSelect.addEventListener("change", () => {
+      if (onlyGradeSelect.value) {
+        prizePositionSelect.value = "";
+        withGradeSelect.value = "";
+        activeMode = "onlyGrade";
+      }
+      updatePosterPrizeText();
+    });
+
+    // Box shows only program name; poster updates with full combined text
+    prizeInput.addEventListener("input", updatePosterPrizeText);
+    updatePosterPrizeText();
+
+    // Expand SVG green shape dynamically based on name width
+    function updateNameBox() {
+      const val = (nameInput.value.trim() || "NAME").toUpperCase();
+      userNameSvgText.textContent = val;
+
+      const posterRect = posterArea.getBoundingClientRect();
+      const posterWidth = posterRect.width || 560;
+      const badgeHeight = posterRect.height ? posterRect.height * 0.031 : 21.7;
+      const minBaseWidth = posterWidth * 0.236;
+
+      const fontSizePx = badgeHeight * (21 / 36);
+      const measurer = document.createElement("span");
+      measurer.style.position = "absolute";
+      measurer.style.visibility = "hidden";
+      measurer.style.whiteSpace = "nowrap";
+      measurer.style.fontFamily = "'Azurio Test', Montserrat, 'Anek Malayalam', sans-serif";
+      measurer.style.fontWeight = "800";
+      measurer.style.fontSize = `${fontSizePx}px`;
+      measurer.style.letterSpacing = `${badgeHeight * (1.2 / 36)}px`;
+      measurer.textContent = val;
+      document.body.appendChild(measurer);
+
+      const textWidth = measurer.getBoundingClientRect().width;
+      document.body.removeChild(measurer);
+
+      const desiredWidth = Math.max(minBaseWidth, Math.ceil(textWidth + badgeHeight * 1.4));
+      nameBadgeWrap.style.width = `${desiredWidth}px`;
+    }
+
+    nameInput.addEventListener("input", updateNameBox);
+    window.addEventListener("resize", updateNameBox);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(updateNameBox);
+    }
+    updateNameBox();
+
+    // Cropper flow
+    uploadBtn.addEventListener("click", () => fileInput.click());
+
+    fileInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        cropImage.src = reader.result;
+        cropModal.classList.remove("hidden");
+        if (cropper) cropper.destroy();
+        setTimeout(() => {
+          cropper = new Cropper(cropImage, {
+            aspectRatio: 3 / 4,
+            viewMode: 1,
+            autoCropArea: 1,
+          });
+        }, 100);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    async function removeBackgroundWithApi(blob, apiKey) {
+      const formData = new FormData();
+      formData.append("image_file", blob, "cropped.png");
+      formData.append("size", "auto");
+
+      const response = await fetch("https://api.remove.bg/v1.0/removebg", {
+        method: "POST",
+        headers: {
+          "X-Api-Key": apiKey,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errText = await response.text().catch(() => "");
+        throw new Error(`remove.bg error (${response.status}): ${errText}`);
+      }
+
+      const resultBlob = await response.blob();
+      return await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(resultBlob);
+      });
+    }
+
+    applyCrop.addEventListener("click", async () => {
+      if (!cropper) return;
+
+      const canvas = cropper.getCroppedCanvas({
+        width: 600,
+        height: 800,
+        imageSmoothingEnabled: true,
+        imageSmoothingQuality: "high",
+      });
+
+      const fallbackDataUrl = canvas.toDataURL("image/png", 1.0);
+      const apiKey = DEFAULT_REMOVE_BG_API_KEY.trim();
+
+      cropModal.classList.add("hidden");
+      cropper.destroy();
+      cropper = null;
+
+      if (!apiKey) {
+        userPhotoSvg.setAttribute("href", fallbackDataUrl);
+        bgStatusText.textContent = "Added cropped photo.";
+        return;
+      }
+
+      try {
+        applyCrop.disabled = true;
+        bgStatusText.textContent = "Removing background...";
+        userPhotoSvg.setAttribute("href", fallbackDataUrl);
+
+        const croppedBlob = await new Promise((resolve) =>
+          canvas.toBlob((blob) => resolve(blob), "image/png", 1.0)
+        );
+
+        const cutoutDataUrl = await removeBackgroundWithApi(croppedBlob, apiKey);
+        userPhotoSvg.setAttribute("href", cutoutDataUrl);
+        bgStatusText.textContent = "Background removed successfully!";
+      } catch (err) {
+        console.error(err);
+        userPhotoSvg.setAttribute("href", fallbackDataUrl);
+        bgStatusText.textContent = "Background removal failed; kept cropped photo.";
+      } finally {
+        applyCrop.disabled = false;
+      }
+    });
+
+    closeModal.addEventListener("click", () => {
+      cropModal.classList.add("hidden");
+      if (cropper) {
+        cropper.destroy();
+        cropper = null;
+      }
+    });
+
+    // HD Download
+    downloadBtn.addEventListener("click", async () => {
+      try {
+        if (document.fonts && document.fonts.ready) {
+          await document.fonts.ready;
+        }
+
+        const rect = posterArea.getBoundingClientRect();
+        const clone = posterArea.cloneNode(true);
+        clone.style.width = rect.width + "px";
+        clone.style.height = rect.height + "px";
+
+        ["#archSvg", "#nameSvg", "#nameTextSvg"].forEach((selector) => {
+          const origSvg = posterArea.querySelector(selector);
+          const cloneSvg = clone.querySelector(selector);
+          if (origSvg && cloneSvg) {
+            const r = origSvg.getBoundingClientRect();
+            cloneSvg.setAttribute("width", r.width);
+            cloneSvg.setAttribute("height", r.height);
+          }
+        });
+
+        const container = document.createElement("div");
+        container.style.position = "fixed";
+        container.style.top = "0";
+        container.style.left = "-9999px";
+        container.style.width = rect.width + "px";
+        container.style.height = rect.height + "px";
+        container.appendChild(clone);
+        document.body.appendChild(container);
+
+        const canvas = await html2canvas(clone, {
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: "#d92d2c",
+          scale: 3,
+          width: rect.width,
+          height: rect.height,
+        });
+
+        document.body.removeChild(container);
+
+        canvas.toBlob((blob) => {
+          const link = document.createElement("a");
+          link.download = "sibaq_congratulations_poster.png";
+          link.href = URL.createObjectURL(blob);
+          link.click();
+          URL.revokeObjectURL(link.href);
+        }, "image/png", 1.0);
+      } catch (error) {
+        console.error("Download failed:", error);
+        alert("Failed to export image. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>
