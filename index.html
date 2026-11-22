@@ -73,33 +73,52 @@
 
     #nameBadgeWrap {
       position: absolute;
-      top: 54.1%;
+      top: 56.1%;
       left: 50%;
       transform: translateX(-50%);
-      height: 4.1%;
+      height: 3.1%;
       min-width: 23.6%;
-      max-width: 86%;
+      max-width: 84%;
       z-index: 3;
       transition: width 0.2s ease;
     }
 
     #nameSvg {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       display: block;
     }
 
+    #nameBadgeText {
+      position: absolute;
+      top: 46%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      color: #ffffff;
+      font-family: 'Azurio Test', 'Montserrat', 'Anek Malayalam', sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      white-space: nowrap;
+      line-height: 1;
+      text-align: center;
+      pointer-events: none;
+      font-size: 13px;
+    }
+
     #congratsMessage {
       position: absolute;
-      top: 59.6%;
+      top: 60.4%;
       left: 50%;
       transform: translateX(-50%);
-      width: 72%;
+      width: 74%;
       font-family: 'Azurio Test', 'Lora', 'Anek Malayalam', serif;
       color: #fff6f2;
       text-align: center;
-      font-size: clamp(9.2px, 1.42vw, 13.4px);
-      line-height: 1.38;
+      font-size: clamp(8.4px, 1.32vw, 11.8px);
+      line-height: 1.3;
       margin: 0;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);
       z-index: 3;
@@ -137,18 +156,12 @@
           </svg>
         </div>
 
-        <!-- 2. Custom SVG Shape + Native SVG Text in Azurio Test -->
+        <!-- 2. Custom SVG Shape + Centered Auto-Fitting Name Text -->
         <div id="nameBadgeWrap">
           <svg id="nameSvg" viewBox="0 0 586 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" fill="rgb(26, 138, 70)" d="M2.784,15.995 C2.784,15.995 7.239,30.239 2.784,33.198 C-1.670,36.157 0.413,89.507 6.128,89.437 C12.670,89.367 50.686,87.340 55.163,93.407 C59.641,99.475 112.322,87.481 119.742,86.304 C127.163,85.128 188.711,77.915 204.402,83.56 C220.92,88.197 284.421,88.311 289.60,88.254 C293.700,88.197 332.983,83.389 339.564,86.304 C346.145,89.220 417.139,83.389 426.266,86.304 C435.394,89.220 491.760,93.231 498.80,90.203 C504.400,87.174 561.115,82.836 567.422,85.5 C573.729,87.174 584.521,91.309 584.646,82.81 C584.770,72.854 583.690,22.625 583.770,18.445 C583.850,14.266 582.666,1.763 572.677,1.877 C562.689,1.991 453.958,2.786 438.235,1.877 C422.512,0.968 375.552,8.827 355.328,2.852 C335.104,-3.122 290.67,5.192 281.762,5.126 C273.457,5.60 234.40,11.329 220.165,5.126 C206.291,-1.77 140.845,4.72 119.742,6.100 C98.640,8.128 22.678,4.266 14.493,4.151 C6.309,4.37 9.225,6.789 2.784,15.995 Z" />
           </svg>
-          <svg id="nameTextSvg" viewBox="0 0 200 36" preserveAspectRatio="xMidYMid meet"
-               style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible;">
-            <text id="userNameSvgText" x="100" y="24.5" text-anchor="middle" fill="#ffffff"
-                  font-family="'Azurio Test', Montserrat, 'Anek Malayalam', sans-serif" font-weight="800" font-size="21" letter-spacing="1.2">
-              MAHMOOD
-            </text>
-          </svg>
+          <span id="nameBadgeText">MAHMOOD</span>
         </div>
 
         <!-- 3. Dynamic Achievement Paragraph -->
@@ -164,15 +177,15 @@
     <div class="flex flex-col justify-center items-center gap-4 w-full lg:w-[42%]">
       <div class="w-full max-w-sm flex flex-col gap-3">
         <label class="text-xs font-bold uppercase tracking-wider text-gray-500 text-center">
-          Participant Name 
+          Participant Name (Expands SVG Shape)
         </label>
-        <input id="nameInput" type="text" value="" placeholder="Enter Name"
+        <input id="nameInput" type="text" value="MAHMOOD" placeholder="Enter Name"
           class="border border-gray-300 rounded-full px-4 py-2.5 w-full text-center font-semibold focus:outline-none focus:ring-2 focus:ring-green-600">
 
         <label class="text-xs font-bold uppercase tracking-wider text-gray-500 text-center mt-1">
-          Prize & Grade Selection
+          Prize, Grade & Category Selection
         </label>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <select id="prizePositionSelect" aria-label="Prize Position"
             class="border border-red-600 rounded-full px-3 py-2 text-xs font-semibold text-gray-700 bg-white text-center focus:outline-none focus:ring-2 focus:ring-red-600 cursor-pointer">
             <option value="">Prize...</option>
@@ -196,13 +209,25 @@
             <option value="B Grade">only B Grade</option>
             <option value="C Grade">only C Grade</option>
           </select>
+
+          <select id="categorySelect" aria-label="Category"
+            class="border border-gray-300 rounded-full px-3 py-2 text-xs font-semibold text-gray-700 bg-white text-center focus:outline-none focus:ring-2 focus:ring-red-600 cursor-pointer">
+            <option value="" selected>Category...</option>
+            <option value="Bidaya">ബിദായ</option>
+            <option value="Ula">ഉല</option>
+            <option value="Saniya">സാനിയ</option>
+            <option value="Sanawiya">സാനവിയ</option>
+            <option value="Aliya">ആലിയ</option>
+            <option value="Kulliyya">കുല്ലിയ</option>
+            <option value="Kulliyya Senior">കുല്ലിയ സീനിയർ</option>
+            <option value="Kulliyya Junior">കുല്ലിയ ജൂനിയർ</option>
+          </select>
         </div>
 
-        <!-- Box shows ONLY the program name -->
         <label class="text-xs font-bold uppercase tracking-wider text-gray-500 text-center mt-1">
           Program Name
         </label>
-        <input id="prizeInput" type="text" value="" placeholder="Enter Program Name"
+        <input id="prizeInput" type="text" value="Malayalam Poetry" placeholder="Enter Program Name"
           class="border border-gray-300 rounded-full px-4 py-2.5 w-full text-center text-sm focus:outline-none focus:ring-2 focus:ring-red-600">
 
         <p id="bgStatusText" class="text-xs text-center text-gray-500 min-h-[16px]"></p>
@@ -324,11 +349,12 @@
 
     const nameInput = document.getElementById("nameInput");
     const nameBadgeWrap = document.getElementById("nameBadgeWrap");
-    const userNameSvgText = document.getElementById("userNameSvgText");
+    const nameBadgeText = document.getElementById("nameBadgeText");
 
     const prizePositionSelect = document.getElementById("prizePositionSelect");
     const withGradeSelect = document.getElementById("withGradeSelect");
     const onlyGradeSelect = document.getElementById("onlyGradeSelect");
+    const categorySelect = document.getElementById("categorySelect");
 
     const prizeInput = document.getElementById("prizeInput");
     const prizeHighlight = document.getElementById("prizeHighlight");
@@ -340,14 +366,19 @@
 
     function updatePosterPrizeText() {
       const programName = prizeInput.value.trim() || "Malayalam Poetry";
+      const categoryLabel = categorySelect.value
+        ? categorySelect.options[categorySelect.selectedIndex].textContent.trim()
+        : "";
+      const categorySuffix = categoryLabel ? ` (${categoryLabel})` : "";
+
       if (activeMode === "onlyGrade") {
         const grade = onlyGradeSelect.value || "A Grade";
-        prizeHighlight.textContent = `${grade} in ${programName}`;
+        prizeHighlight.textContent = `${grade} in ${programName}${categorySuffix}`;
         return;
       }
       const prize = prizePositionSelect.value || "First Prize";
       const grade = activeMode === "withGrade" && withGradeSelect.value ? ` ${withGradeSelect.value}` : "";
-      prizeHighlight.textContent = `${prize}${grade} in ${programName}`;
+      prizeHighlight.textContent = `${prize}${grade} in ${programName}${categorySuffix}`;
     }
 
     prizePositionSelect.addEventListener("change", () => {
@@ -377,43 +408,59 @@
       updatePosterPrizeText();
     });
 
-    // Box shows only program name; poster updates with full combined text
+    categorySelect.addEventListener("change", updatePosterPrizeText);
+
     prizeInput.addEventListener("input", updatePosterPrizeText);
     updatePosterPrizeText();
 
-    // Expand SVG green shape dynamically based on name width
-    function updateNameBox() {
+    // Expand SVG green shape within poster bounds and auto-scale text cleanly
+    function updateNameBox(targetPosterWidth = null, targetPosterHeight = null, wrapEl = nameBadgeWrap, textEl = nameBadgeText) {
       const val = (nameInput.value.trim() || "NAME").toUpperCase();
-      userNameSvgText.textContent = val;
+      textEl.textContent = val;
 
       const posterRect = posterArea.getBoundingClientRect();
-      const posterWidth = posterRect.width || 560;
-      const badgeHeight = posterRect.height ? posterRect.height * 0.031 : 21.7;
+      const posterWidth = targetPosterWidth || posterRect.width || 560;
+      const posterHeight = targetPosterHeight || posterRect.height || posterWidth * 1.25;
+      const badgeHeight = posterHeight * 0.031;
       const minBaseWidth = posterWidth * 0.236;
+      const maxBoxWidth = posterWidth * 0.84;
 
-      const fontSizePx = badgeHeight * (21 / 36);
+      const baseFontSizePx = Math.max(10, badgeHeight * 0.62);
+      const letterSpacingPx = Math.max(0.5, badgeHeight * 0.035);
+
       const measurer = document.createElement("span");
       measurer.style.position = "absolute";
       measurer.style.visibility = "hidden";
       measurer.style.whiteSpace = "nowrap";
-      measurer.style.fontFamily = "'Azurio Test', Montserrat, 'Anek Malayalam', sans-serif";
+      measurer.style.fontFamily = "'Azurio Test', 'Montserrat', 'Anek Malayalam', sans-serif";
       measurer.style.fontWeight = "800";
-      measurer.style.fontSize = `${fontSizePx}px`;
-      measurer.style.letterSpacing = `${badgeHeight * (1.2 / 36)}px`;
+      measurer.style.textTransform = "uppercase";
+      measurer.style.fontSize = `${baseFontSizePx}px`;
+      measurer.style.letterSpacing = `${letterSpacingPx}px`;
       measurer.textContent = val;
       document.body.appendChild(measurer);
 
       const textWidth = measurer.getBoundingClientRect().width;
       document.body.removeChild(measurer);
 
-      const desiredWidth = Math.max(minBaseWidth, Math.ceil(textWidth + badgeHeight * 1.4));
-      nameBadgeWrap.style.width = `${desiredWidth}px`;
+      const horizontalPad = badgeHeight * 1.1;
+      const preferredWidth = Math.ceil(textWidth + horizontalPad);
+      const clampedWidth = Math.max(minBaseWidth, Math.min(maxBoxWidth, preferredWidth));
+
+      wrapEl.style.width = `${clampedWidth}px`;
+
+      const maxTextWidthInsideBadge = Math.max(16, clampedWidth - horizontalPad);
+      const scale = textWidth > maxTextWidthInsideBadge ? maxTextWidthInsideBadge / textWidth : 1;
+      const finalFontSize = Math.max(8, baseFontSizePx * scale);
+
+      textEl.style.fontSize = `${finalFontSize.toFixed(2)}px`;
+      textEl.style.letterSpacing = `${(letterSpacingPx * scale).toFixed(2)}px`;
     }
 
-    nameInput.addEventListener("input", updateNameBox);
-    window.addEventListener("resize", updateNameBox);
+    nameInput.addEventListener("input", () => updateNameBox());
+    window.addEventListener("resize", () => updateNameBox());
     if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(updateNameBox);
+      document.fonts.ready.then(() => updateNameBox());
     }
     updateNameBox();
 
@@ -518,25 +565,93 @@
       }
     });
 
-    // HD Download
+    // Helper to render crisp centered name text onto a canvas for accurate export inside the green badge
+    function createNameBadgeExportImg(text, boxW, boxH, fontSizePx, letterSpacingPx) {
+      const scale = 3;
+      const c = document.createElement("canvas");
+      c.width = Math.max(1, Math.round(boxW * scale));
+      c.height = Math.max(1, Math.round(boxH * scale));
+      const ctx = c.getContext("2d");
+      ctx.scale(scale, scale);
+
+      ctx.font = `800 ${fontSizePx}px "Azurio Test", "Montserrat", "Anek Malayalam", sans-serif`;
+      ctx.fillStyle = "#ffffff";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      if (letterSpacingPx && typeof ctx.letterSpacing !== "undefined") {
+        ctx.letterSpacing = `${letterSpacingPx}px`;
+      }
+
+      ctx.fillText(text, boxW / 2, boxH / 2 - 0.5);
+
+      const img = document.createElement("img");
+      img.src = c.toDataURL("image/png", 1.0);
+      img.style.position = "absolute";
+      img.style.inset = "0";
+      img.style.width = "100%";
+      img.style.height = "100%";
+      img.style.objectFit = "contain";
+      img.style.zIndex = "2";
+      img.style.pointerEvents = "none";
+      return img;
+    }
+
+    // HD Download rendered at fixed 560x700 base with scale 3 (1680x2100)
     downloadBtn.addEventListener("click", async () => {
       try {
         if (document.fonts && document.fonts.ready) {
           await document.fonts.ready;
         }
 
-        const rect = posterArea.getBoundingClientRect();
-        const clone = posterArea.cloneNode(true);
-        clone.style.width = rect.width + "px";
-        clone.style.height = rect.height + "px";
+        const exportW = 560;
+        const exportH = 700;
 
-        ["#archSvg", "#nameSvg", "#nameTextSvg"].forEach((selector) => {
+        const clone = posterArea.cloneNode(true);
+        clone.style.position = "relative";
+        clone.style.width = exportW + "px";
+        clone.style.height = exportH + "px";
+        clone.style.maxWidth = exportW + "px";
+        clone.style.aspectRatio = "auto";
+        clone.style.transform = "none";
+
+        const cloneMsg = clone.querySelector("#congratsMessage");
+        if (cloneMsg) {
+          cloneMsg.style.fontSize = "11.8px";
+          cloneMsg.style.lineHeight = "1.3";
+          cloneMsg.style.top = "60.4%";
+        }
+
+        const cloneWrap = clone.querySelector("#nameBadgeWrap");
+        const cloneText = clone.querySelector("#nameBadgeText");
+        if (cloneWrap && cloneText) {
+          updateNameBox(exportW, exportH, cloneWrap, cloneText);
+          const boxW = parseFloat(cloneWrap.style.width) || (exportW * 0.236);
+          const boxH = exportH * 0.031;
+          const fontSizePx = parseFloat(cloneText.style.fontSize) || (boxH * 0.62);
+          const letterSpacingPx = parseFloat(cloneText.style.letterSpacing) || 0;
+
+          cloneWrap.style.height = `${boxH}px`;
+          const badgeImg = createNameBadgeExportImg(
+            cloneText.textContent,
+            boxW,
+            boxH,
+            fontSizePx,
+            letterSpacingPx
+          );
+          cloneText.remove();
+          cloneWrap.appendChild(badgeImg);
+        }
+
+        ["#archSvg", "#nameSvg"].forEach((selector) => {
           const origSvg = posterArea.querySelector(selector);
           const cloneSvg = clone.querySelector(selector);
           if (origSvg && cloneSvg) {
             const r = origSvg.getBoundingClientRect();
-            cloneSvg.setAttribute("width", r.width);
-            cloneSvg.setAttribute("height", r.height);
+            const ratioW = r.width / (posterArea.getBoundingClientRect().width || exportW);
+            const ratioH = r.height / (posterArea.getBoundingClientRect().height || exportH);
+            cloneSvg.setAttribute("width", Math.round(exportW * ratioW));
+            cloneSvg.setAttribute("height", Math.round(exportH * ratioH));
           }
         });
 
@@ -544,8 +659,9 @@
         container.style.position = "fixed";
         container.style.top = "0";
         container.style.left = "-9999px";
-        container.style.width = rect.width + "px";
-        container.style.height = rect.height + "px";
+        container.style.width = exportW + "px";
+        container.style.height = exportH + "px";
+        container.style.overflow = "hidden";
         container.appendChild(clone);
         document.body.appendChild(container);
 
@@ -554,15 +670,19 @@
           allowTaint: true,
           backgroundColor: "#d92d2c",
           scale: 3,
-          width: rect.width,
-          height: rect.height,
+          x: 0,
+          y: 0,
+          width: exportW,
+          height: exportH,
+          windowWidth: exportW,
+          windowHeight: exportH,
         });
 
         document.body.removeChild(container);
 
         canvas.toBlob((blob) => {
           const link = document.createElement("a");
-          link.download = "sibaq_congratulations_poster.png";
+          link.download = "sibaq_congratulations_poster.jpg";
           link.href = URL.createObjectURL(blob);
           link.click();
           URL.revokeObjectURL(link.href);
